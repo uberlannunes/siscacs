@@ -5,6 +5,7 @@ import lombok.Builder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -23,6 +24,12 @@ class Arma {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Calibre calibre;
+
+    @Column(name = "data_compra")
+    private LocalDate dataCompra;
+
+    @Column(name = "data_venda")
+    private LocalDate dataVenda;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "id", nullable = false)
@@ -69,6 +76,22 @@ class Arma {
 
     public void setCalibre(Calibre calibre) {
         this.calibre = calibre;
+    }
+
+    public LocalDate getDataCompra() {
+        return dataCompra;
+    }
+
+    public void setDataCompra(LocalDate dataCompra) {
+        this.dataCompra = dataCompra;
+    }
+
+    public LocalDate getDataVenda() {
+        return dataVenda;
+    }
+
+    public void setDataVenda(LocalDate dataVenda) {
+        this.dataVenda = dataVenda;
     }
 
     public Usuario getUsuario() {

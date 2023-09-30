@@ -5,27 +5,33 @@ import lombok.Builder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
 @Entity
-@Table(name = "treinos")
-public class Treino {
+@Table(name = "treinamentos")
+class Treinamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "data_treinamento", nullable = false)
+    private LocalDate dataTreinamento;
+
     @ManyToOne
     @JoinColumn(name = "arma_id", nullable = false)
     private Arma arma;
 
-    @Column(name = "quantiadde_tiros", nullable = false)
+    @Column(name = "quantidade_tiros", nullable = false)
     private int quantidadeTiros;
 
     @Column(nullable = false)
     private int pontuacao;
+
+    private String observacao;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
@@ -35,7 +41,7 @@ public class Treino {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Treino() {
+    public Treinamento() {
     }
 
     public UUID getId() {
@@ -44,6 +50,14 @@ public class Treino {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public LocalDate getDataTreinamento() {
+        return dataTreinamento;
+    }
+
+    public void setDataTreinamento(LocalDate dataTreinamento) {
+        this.dataTreinamento = dataTreinamento;
     }
 
     public Arma getArma() {
@@ -68,6 +82,14 @@ public class Treino {
 
     public void setPontuacao(int pontuacao) {
         this.pontuacao = pontuacao;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 
     public LocalDateTime getCreatedAt() {
