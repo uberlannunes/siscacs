@@ -2,7 +2,7 @@
 
 ## Tecnologias utilizadas
 
-O proeto utiliza as seguintes tecnologias:
+O projeto utiliza as seguintes tecnologias:
 
 - Java 17
 - Spring Boot 3
@@ -15,6 +15,6 @@ O proeto utiliza as seguintes tecnologias:
 
 Antes de executar o projeto, tenha certeza que tem os seguintes pré-requisitos instalados:
 
-- Java JDK (version 17 or higher)
-- Maven (para o build e gerenciamento ed dependências)
+- Java JDK (versão 17 ou maior)
+- Maven (para o build e gerenciamento de dependências)
 - Docker
