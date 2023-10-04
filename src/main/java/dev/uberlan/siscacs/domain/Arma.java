@@ -1,6 +1,7 @@
 package dev.uberlan.siscacs.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "armas")
 class Arma {
