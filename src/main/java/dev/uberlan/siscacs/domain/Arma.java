@@ -21,11 +21,11 @@ class Arma {
     private UUID id;
 
     @Column(nullable = false)
-    private String descricao;
-
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Calibre calibre;
+
+    @Column(nullable = false)
+    private String descricao;
 
     @Column(name = "data_compra")
     private LocalDate dataCompra;
