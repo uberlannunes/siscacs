@@ -24,4 +24,6 @@ interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
             FROM Usuario u
             """)
     List<UsuarioDTO> findAllUsuarios();
+
+    Usuario findByLogin(String login);
 }

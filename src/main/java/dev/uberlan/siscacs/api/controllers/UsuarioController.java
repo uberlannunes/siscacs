@@ -48,7 +48,7 @@ public class UsuarioController {
 
     @GetMapping("/new")
     public ModelAndView criarUsuario() {
-        UsuarioCreateRequest request = new UsuarioCreateRequest("usuario01", "Usuário 01", "123456", "cac123");
+        UsuarioCreateRequest request = new UsuarioCreateRequest("usuario01", "Usuário 01", "123456", "cac123", "");
 
         UsuarioDTO usuario = usuarioService.createUsuario(new UsuarioCreateCommand(request.login(), request.nome(), request.password(), request.cacId()));
 

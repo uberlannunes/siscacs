@@ -4,6 +4,7 @@ import dev.uberlan.siscacs.domain.command.UsuarioCreateCommand;
 import dev.uberlan.siscacs.domain.command.UsuarioUpdateCommand;
 import dev.uberlan.siscacs.domain.dto.UsuarioDTO;
 import dev.uberlan.siscacs.exception.UsuarioNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +17,17 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class UsuarioService {
 
+    private final PasswordEncoder passwordEncoder;
+
     private final UsuarioRepository usuarioRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(PasswordEncoder passwordEncoder, UsuarioRepository usuarioRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.usuarioRepository = usuarioRepository;
+    }
+
+    public Optional<Usuario> findUsuarioByLogin(String login) {
+        return Optional.ofNullable(usuarioRepository.findByLogin(login));
     }
 
     public Optional<UsuarioDTO> findUsuarioById(UUID id) {
@@ -35,7 +43,8 @@ public class UsuarioService {
         Usuario usuario = Usuario.builder()
                 .login(cmd.login())
                 .nome(cmd.nome())
-                .password(cmd.password())
+//                .password(cmd.password())
+                .password(passwordEncoder.encode(cmd.password()))
                 .cacId(cmd.cacId())
                 .createdAt(LocalDateTime.now())
                 .build();
