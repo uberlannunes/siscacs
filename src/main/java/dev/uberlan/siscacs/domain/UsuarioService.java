@@ -27,6 +27,8 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> findUsuarioByLogin(String login) {
+//        Optional<Usuario> byLogin = Optional.ofNullable(usuarioRepository.findByLogin(login));
+//        return byLogin.map(u -> Optional.of(new UsuarioDTO(u.getId(), u.getLogin(), u.getNome(), u.getCacId()))).orElse(Optional.empty());
         return Optional.ofNullable(usuarioRepository.findByLogin(login));
     }
 
@@ -43,7 +45,6 @@ public class UsuarioService {
         Usuario usuario = Usuario.builder()
                 .login(cmd.login())
                 .nome(cmd.nome())
-//                .password(cmd.password())
                 .password(passwordEncoder.encode(cmd.password()))
                 .cacId(cmd.cacId())
                 .createdAt(LocalDateTime.now())
@@ -57,7 +58,7 @@ public class UsuarioService {
     public void updateUsuario(UsuarioUpdateCommand cmd) {
 
         Usuario usuario = usuarioRepository.findById(cmd.id())
-                .orElseThrow(() -> UsuarioNotFoundException.of(cmd.id()));
+                .orElseThrow(() -> UsuarioNotFoundException.of(cmd.id().toString()));
 
         usuario.setNome(cmd.nome());
         usuario.setPassword(cmd.password());
