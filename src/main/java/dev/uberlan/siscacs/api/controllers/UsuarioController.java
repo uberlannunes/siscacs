@@ -1,14 +1,12 @@
 package dev.uberlan.siscacs.api.controllers;
 
-import dev.uberlan.siscacs.api.controllers.request.UsuarioCreateRequest;
+import dev.uberlan.siscacs.api.request.UsuarioCreateRequest;
 import dev.uberlan.siscacs.domain.UsuarioService;
 import dev.uberlan.siscacs.domain.command.UsuarioCreateCommand;
 import dev.uberlan.siscacs.domain.dto.UsuarioDTO;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 

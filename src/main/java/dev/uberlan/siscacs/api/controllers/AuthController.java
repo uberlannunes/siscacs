@@ -1,7 +1,7 @@
 package dev.uberlan.siscacs.api.controllers;
 
-import dev.uberlan.siscacs.api.controllers.request.UsuarioCreateRequest;
-import dev.uberlan.siscacs.api.controllers.request.UsuarioLoginRequest;
+import dev.uberlan.siscacs.api.request.UsuarioCreateRequest;
+import dev.uberlan.siscacs.api.request.UsuarioLoginRequest;
 import dev.uberlan.siscacs.domain.Usuario;
 import dev.uberlan.siscacs.domain.UsuarioService;
 import dev.uberlan.siscacs.domain.command.UsuarioCreateCommand;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
