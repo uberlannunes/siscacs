@@ -5,19 +5,20 @@ import dev.uberlan.siscacs.domain.ArmaService;
 import dev.uberlan.siscacs.domain.Usuario;
 import dev.uberlan.siscacs.domain.UsuarioService;
 import dev.uberlan.siscacs.domain.command.ArmaCreateCommand;
+import dev.uberlan.siscacs.domain.dto.ArmaDTO;
+import dev.uberlan.siscacs.exception.ArmaNotFoundException;
 import dev.uberlan.siscacs.exception.UsuarioNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/armas")
@@ -32,9 +33,30 @@ public class ArmaController {
     }
 
     @GetMapping
-    public String consultarArmas(Authentication authentication) {
-        System.out.println("authentication = " + authentication);
-        return "armas/armas-home";
+    public ModelAndView consultarArmas(Principal principal) {
+        System.out.println("principal = " + principal);
+
+        Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
+
+        List<ArmaDTO> armas = armaService.findArmasByUsuario(usuario.getId());
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("armas/armas-home");
+        modelAndView.addObject("armas", armas);
+
+        return modelAndView;
+    }
+
+    @GetMapping("/{id}")
+    public ModelAndView consultarArma(Principal principal, @PathVariable("id") UUID id) {
+        System.out.println("principal = " + principal);
+
+        ArmaDTO arma = armaService.findArmaById(id).orElseThrow(() -> ArmaNotFoundException.of(id));
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("armas/armas-view");
+        modelAndView.addObject("arma", arma);
+
+        return modelAndView;
     }
 
     @GetMapping("/new")

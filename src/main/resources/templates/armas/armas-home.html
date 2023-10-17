@@ -22,6 +22,34 @@
         <!-- Content Row -->
         <div class="row">
 
+            <div class="table-responsive" >
+
+                <table class="table table-bordered">
+
+                    <thead class="table-primary" >
+                    <tr>
+                        <th scope="col">Calibre</th>
+                        <th scope="col">Descrição</th>
+                        <th scope="col">Data da Compra</th>
+                        <th scope="col">Data da Venda</th>
+                        <th scope="col">Selecionar</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="arma : ${armas}">
+                        <td th:text="${arma.calibre}"></td>
+                        <td th:text="${arma.descricao}"></td>
+                        <td th:text="${arma.dataCompra}"></td>
+                        <td th:text="${arma.dataVenda}"></td>
+                        <td style="text-align: center;"><a th:href="@{/armas/{id}(id=${arma.id})}" class="btn btn-primary"><i class="fas fa-check"></i> Selecionar</a></td>
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
 
     </div>

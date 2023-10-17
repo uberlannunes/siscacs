@@ -26,8 +26,8 @@ public class ArmaService {
         return armaRepository.findArmaById(id);
     }
 
-    public List<ArmaDTO> findAllUsuarios(UUID id) {
-        return armaRepository.findArmaByUsuarioId(id);
+    public List<ArmaDTO> findArmasByUsuario(UUID id) {
+        return armaRepository.findArmaByUsuarioId(Usuario.builder().id(id).build());
     }
 
     @Transactional
@@ -46,7 +46,7 @@ public class ArmaService {
     }
 
     @Transactional
-    public void updateUsuario(ArmaUpdateCommand cmd) {
+    public void updateArma(ArmaUpdateCommand cmd) {
 
         Arma arma = armaRepository.findById(cmd.id())
                 .orElseThrow(() -> ArmaNotFoundException.of(cmd.id()));
