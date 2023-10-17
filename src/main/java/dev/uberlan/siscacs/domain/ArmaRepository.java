@@ -24,5 +24,5 @@ interface ArmaRepository extends JpaRepository<Arma, UUID> {
             FROM Arma a
             WHERE a.usuario = ?1
             """)
-    List<ArmaDTO> findArmaByUsuarioId(UUID id);
+    List<ArmaDTO> findArmaByUsuarioId(Usuario usuario);
 }
