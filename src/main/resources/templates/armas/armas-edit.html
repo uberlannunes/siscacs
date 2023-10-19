@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      th:with="currentPage='armas'">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SisCACs</title>
+
+    <!-- Custom fonts for this template-->
+    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0 text-gray-800">Alterar Arma</h1>
+        </div>
+
+        <!-- Content Row -->
+        <div class="row">
+
+            <form th:action="@{'/armas/' + ${armaRequest.id} + '/edit'}" th:method="put" th:object="${armaRequest}">
+
+                <input type="hidden" th:field="*{id}" id="id">
+
+                <div class="form-group row">
+                    <label for="calibre" class="form-label"><strong>Calibre</strong></label>
+                    <select class="form-control" id="calibre" th:field="*{calibre}" name="calibre" required>
+                        <option value="">Selecione o Calibre</option>
+                        <option th:each="calibreOpt : ${T(dev.uberlan.siscacs.domain.Calibre).values()}"
+                                th:value="${calibreOpt}" th:text="${#strings.replace(calibreOpt,'_',' ')}"></option>
+                    </select>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('calibre')}" th:errors="*{calibre}"></div>
+                </div>
+                <div class="form-group row">
+                    <label for="descricao" class="form-label"><strong>Descrição</strong></label>
+                    <input type="text" class="form-control" id="descricao"
+                           placeholder="informe a descrição"
+                           th:field="*{descricao}" required>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+                </div>
+                <div class="form-group row">
+                    <label for="dataCompra" class="form-label"><strong>Data da Compra</strong></label>
+                    <div class="input-group date" data-date-format="dd/mm/yyyy">
+                        <input type="text" id="dataCompra" class="form-control" placeholder="dd/mm/yyyy" th:field="*{dataCompra}" required>
+                        <div class="input-group-addon" >
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('dataCompra')}">Informe a data de compra corretamente!</div>
+                </div>
+                <div class="form-group row">
+                    <label for="dataVenda" class="form-label"><strong>Data da Venda</strong></label>
+                    <div class="input-group date" data-date-format="dd/mm/yyyy">
+                        <input type="text" id="dataVenda" class="form-control" placeholder="dd/mm/yyyy" th:field="*{dataVenda}">
+                        <div class="input-group-addon" >
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('dataVenda')}">Informe a data da venda corretamente!</div>
+                </div>
+                <div class="form-group row">
+                    <label for="observacao" class="form-label"><strong>Observação</strong></label>
+                    <input type="text" class="form-control" id="observacao"
+                           placeholder="informe a observação"
+                           th:field="*{observacao}">
+                </div>
+
+                <div class="form-group row">
+                    <div class="d-flex justify-content-center" >
+                        <button class="btn btn-primary" title="Salvar" type="submit">Salvar <i class="fas fa-arrow-circle-right"></i></button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js" integrity="sha512-LsnSViqQyaXpD4mBBdRYeP6sRwJiJveh2ZIbW41EBrNmKxgr/LFZIiWT6yr+nycvhvauz8c2nYMhrP80YhG7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $('.input-group.date').datepicker({format: "dd/mm/yyyy"});
+    </script>
+</body>
+
+</html>

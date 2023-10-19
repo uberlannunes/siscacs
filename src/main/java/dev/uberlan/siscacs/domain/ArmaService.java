@@ -54,6 +54,7 @@ public class ArmaService {
         arma.setCalibre(cmd.calibre());
         arma.setDescricao(cmd.descricao());
         arma.setDataCompra(cmd.dataCompra());
+        arma.setDataVenda(cmd.dataVenda());
         arma.setObservacao(cmd.observacao());
         arma.setUpdatedAt(LocalDateTime.now());
         armaRepository.save(arma);

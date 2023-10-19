@@ -32,16 +32,18 @@
                         <th scope="col">Descrição</th>
                         <th scope="col">Data da Compra</th>
                         <th scope="col">Data da Venda</th>
+                        <th scope="col">Observação</th>
                         <th scope="col">Selecionar</th>
                     </tr>
                     </thead>
 
                     <tbody>
                     <tr th:each="arma : ${armas}">
-                        <td th:text="${arma.calibre}"></td>
+                        <td th:text="${#strings.replace(arma.calibre,'_',' ')}"></td>
                         <td th:text="${arma.descricao}"></td>
-                        <td th:text="${arma.dataCompra}"></td>
-                        <td th:text="${arma.dataVenda}"></td>
+                        <td th:text="${#temporals.format(arma.dataCompra, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${#temporals.format(arma.dataVenda, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${arma.observacao}"></td>
                         <td style="text-align: center;"><a th:href="@{/armas/{id}(id=${arma.id})}" class="btn btn-primary"><i class="fas fa-check"></i> Selecionar</a></td>
                     </tr>
                     </tbody>

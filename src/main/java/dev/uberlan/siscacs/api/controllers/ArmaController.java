@@ -1,16 +1,20 @@
 package dev.uberlan.siscacs.api.controllers;
 
 import dev.uberlan.siscacs.api.request.ArmaCreateRequest;
+import dev.uberlan.siscacs.api.request.ArmaUpdateRequest;
 import dev.uberlan.siscacs.domain.ArmaService;
 import dev.uberlan.siscacs.domain.Usuario;
 import dev.uberlan.siscacs.domain.UsuarioService;
 import dev.uberlan.siscacs.domain.command.ArmaCreateCommand;
+import dev.uberlan.siscacs.domain.command.ArmaUpdateCommand;
 import dev.uberlan.siscacs.domain.dto.ArmaDTO;
+import dev.uberlan.siscacs.exception.ArmaInvalidDataException;
 import dev.uberlan.siscacs.exception.ArmaNotFoundException;
 import dev.uberlan.siscacs.exception.UsuarioNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -84,6 +88,33 @@ public class ArmaController {
         ArmaCreateCommand cmd = new ArmaCreateCommand(armaRequest.calibre(), armaRequest.descricao(), armaRequest.dataCompra(), usuario.getId(), armaRequest.observacao());
         armaService.createArma(cmd);
 
-        return "armas/armas-home";
+        return "redirect:/armas";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editarArmaShow(Principal principal, @PathVariable("id") UUID id, Model model) {
+        System.out.println("principal = " + principal);
+
+        ArmaDTO arma = armaService.findArmaById(id).orElseThrow(() -> ArmaNotFoundException.of(id));
+
+        ArmaUpdateRequest armaRequest = new ArmaUpdateRequest(arma.id(), arma.calibre(), arma.descricao(), arma.dataCompra(), arma.dataVenda(), arma.observacao());
+        model.addAttribute("armaRequest", armaRequest);
+
+        return "armas/armas-edit";
+    }
+
+    @PutMapping("/{id}/edit")
+    public String editarArma(Principal principal, @PathVariable("id") UUID id, @Valid @ModelAttribute("armaRequest") ArmaUpdateRequest armaRequest) {
+        System.out.println("principal = " + principal);
+        System.out.println("armaRequest = " + armaRequest);
+
+//        if (!id.equals(armaRequest.id()))
+//            throw new ArmaInvalidDataException(id);
+
+//        ArmaDTO arma = armaService.findArmaById(id).orElseThrow(() -> ArmaNotFoundException.of(id));
+        ArmaUpdateCommand cmd = new ArmaUpdateCommand(armaRequest.id(), armaRequest.calibre(), armaRequest.descricao(), armaRequest.dataCompra(), armaRequest.dataVenda(), armaRequest.observacao());
+        armaService.updateArma(cmd);
+
+        return "redirect:/armas";
     }
 }
