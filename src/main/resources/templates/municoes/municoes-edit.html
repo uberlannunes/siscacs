@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      th:with="currentPage='armas'">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SisCACs</title>
+
+    <!-- Custom fonts for this template-->
+    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0 text-gray-800">Alterar Munições</h1>
+        </div>
+
+        <!-- Content Row -->
+        <div class="row">
+
+            <form th:action="@{'/municoes/' + ${municaoRequest.id} + '/edit'}" th:method="put" th:object="${municaoRequest}">
+
+                <input type="hidden" th:field="*{id}" id="id">
+
+                <div class="form-group row">
+                    <label for="arma" class="form-label"><strong>Arma</strong></label>
+                    <select class="form-control" id="arma" name="arma" th:field="*{arma}" required disabled>
+                        <option value="" selected>Selecione a Arma</option>
+                        <option th:each="arma : ${armas}" th:value="${arma}" th:text="${arma.descricao}"></option>
+                    </select>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('arma')}" th:errors="*{arma}"></div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="quantidade" class="form-label"><strong>Quantidade</strong></label>
+                    <input type="number" class="form-control" id="quantidade"
+                           placeholder="informe a quantidade"
+                           th:field="*{quantidade}"
+                           required>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}"></div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="d-flex justify-content-center" >
+                        <button class="btn btn-primary" title="Salvar" type="submit">Salvar <i class="fas fa-arrow-circle-right"></i></button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</body>
+
+</html>

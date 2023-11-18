@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      th:with="currentPage='armas'">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SisCACs</title>
+
+    <!-- Custom fonts for this template-->
+    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0 text-gray-800">Arma</h1>
+        </div>
+
+        <!-- Content Row -->
+        <div class="row">
+
+            <div class="form-horizontal">
+
+                <div class="form-group row">
+                    <label for="calibre" class="form-label"><strong>Calibre</strong></label>
+                    <select class="form-control" id="calibre" name="calibre" disabled="disabled">
+                        <option th:value="${arma.calibre}" th:text="${#strings.replace(arma.calibre,'_',' ')}"></option>
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <label for="descricao" class="form-label"><strong>Descrição</strong></label>
+                    <input type="text" class="form-control" disabled="disabled" id="descricao"
+                           placeholder="informe a descrição"
+                           th:field="${arma.descricao}">
+                </div>
+                <div class="form-group row">
+                    <label for="dataCompra" class="form-label"><strong>Data da Compra</strong></label>
+                    <div class="input-group date" data-date-format="dd/mm/yyyy">
+                        <input type="text" id="dataCompra" class="form-control" placeholder="dd/mm/yyyy" th:field="${arma.dataCompra}" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="dataVenda" class="form-label"><strong>Data da Venda</strong></label>
+                    <div class="input-group date" data-date-format="dd/mm/yyyy">
+                        <input type="text" id="dataVenda" class="form-control" placeholder="" th:field="${arma.dataVenda}" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="observacao" class="form-label"><strong>Observação</strong></label>
+                    <input type="text" class="form-control" id="observacao"
+                           placeholder=""
+                           th:field="${arma.observacao}"
+                           disabled="disabled">
+                </div>
+
+                <a th:href="@{'/armas/' + ${arma.id} + '/edit'}" class="btn btn-primary btn-user btn-block">
+                    Editar
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script th:src="@{/js/sb-admin-2.min.js}"></script>
+</body>
+
+</html>

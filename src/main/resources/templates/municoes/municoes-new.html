@@ -22,6 +22,32 @@
         <!-- Content Row -->
         <div class="row">
 
+            <form th:action="@{/municoes/new}" method="post" class="user" th:object="${municaoRequest}">
+
+                <div class="form-group row">
+                    <label for="armaId" class="form-label"><strong>Arma</strong></label>
+                    <select class="form-control" id="armaId" name="armaId" required>
+                        <option value="" selected>Selecione a Arma</option>
+                        <option th:each="arma : ${armas}" th:value="${arma.id}" th:text="${arma.descricao}"></option>
+                    </select>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('armaId')}" th:errors="*{armaId}"></div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="quantidade" class="form-label"><strong>Quantidade</strong></label>
+                    <input type="text" class="form-control" id="quantidade"
+                           placeholder="informe a quantidade"
+                           th:field="*{quantidade}"
+                           required>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}"></div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="d-flex justify-content-center" >
+                        <button class="btn btn-primary" title="Salvar" type="submit">Salvar <i class="fas fa-arrow-circle-right"></i></button>
+                    </div>
+                </div>
+            </form>
         </div>
 
     </div>
