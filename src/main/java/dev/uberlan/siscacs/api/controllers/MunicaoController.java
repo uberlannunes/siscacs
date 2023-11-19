@@ -107,7 +107,7 @@ public class MunicaoController {
 
         MunicaoDTO municao = municaoService.findMunicaoById(id).orElseThrow(() -> MunicaoNotFoundException.of(id));
 
-        ArmaDTO armaDTO = new ArmaDTO(municao.arma().id(), municao.arma().calibre(), municao.arma().descricao(), municao.arma().dataCompra(), municao.arma().dataVenda(), municao.arma().usuarioId(), municao.arma().observacao());
+        ArmaDTO armaDTO = new ArmaDTO(municao.arma().id(), municao.arma().calibre());
         MunicaoUpdateRequest municaoRequest = new MunicaoUpdateRequest(municao.id(), armaDTO.id(), municao.quantidade());
 
         model.addAttribute("municaoRequest", municaoRequest);

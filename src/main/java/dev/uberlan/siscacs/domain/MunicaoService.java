@@ -4,6 +4,7 @@ import dev.uberlan.siscacs.domain.command.MunicaoCreateCommand;
 import dev.uberlan.siscacs.domain.command.MunicaoUpdateCommand;
 import dev.uberlan.siscacs.domain.dto.ArmaDTO;
 import dev.uberlan.siscacs.domain.dto.MunicaoDTO;
+import dev.uberlan.siscacs.exception.MunicaoInvalidDataException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,22 +43,10 @@ public class MunicaoService {
     }
 
     @Transactional
-    public MunicaoDTO updateMunicao(MunicaoUpdateCommand cmd) {
-        Municao municao = Municao.builder()
-                .id(cmd.id())
-                .arma(Arma.builder().id(cmd.arma().id()).build())
-                .quantidade(cmd.quantidade()).build();
+    public void updateMunicao(MunicaoUpdateCommand cmd) {
+        if (cmd.quantidade() < 0)
+            throw MunicaoInvalidDataException.of(cmd.id());
 
-        Municao savedMunicao = municaoRepository.save(municao);
-        ArmaDTO armaDTO = new ArmaDTO(
-                savedMunicao.getArma().getId(),
-                savedMunicao.getArma().getCalibre(),
-                savedMunicao.getArma().getDescricao(),
-                savedMunicao.getArma().getDataCompra(),
-                savedMunicao.getArma().getDataVenda(),
-                savedMunicao.getArma().getUsuario().getId(),
-                savedMunicao.getArma().getObservacao());
-
-        return new MunicaoDTO(savedMunicao.getId(), armaDTO, savedMunicao.getQuantidade());
+        municaoRepository.updateQuantidade(cmd.id(), cmd.quantidade());
     }
 }

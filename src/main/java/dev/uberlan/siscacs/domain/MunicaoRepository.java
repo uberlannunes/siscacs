@@ -3,7 +3,9 @@ package dev.uberlan.siscacs.domain;
 import dev.uberlan.siscacs.domain.dto.ArmaDTO;
 import dev.uberlan.siscacs.domain.dto.MunicaoDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,4 +35,7 @@ interface MunicaoRepository extends JpaRepository<Municao, UUID> {
     List<MunicaoDTO> findMunicoesByUsuarioId(Usuario usuario);
 //            ORDER BY a.arma
 
+    @Modifying
+    @Query("update Municao m set m.quantidade = :quantidade where m.id = :id")
+    void updateQuantidade(@Param(value = "id") UUID id, @Param(value = "quantidade") Integer quantidade);
 }

@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/layout}"
-      th:with="currentPage='armas'">
+      th:with="currentPage='municoes'">
 
 <head>
     <meta charset="utf-8">
@@ -32,7 +32,7 @@
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          <h1 class="h3 mb-0 text-gray-800">Arma</h1>
+          <h1 class="h3 mb-0 text-gray-800">Munição</h1>
         </div>
 
         <!-- Content Row -->
@@ -41,45 +41,25 @@
             <div class="form-horizontal">
 
                 <div class="form-group row">
-                    <label for="calibre" class="form-label"><strong>Calibre</strong></label>
-                    <select class="form-control" id="calibre" name="calibre" disabled="disabled">
-                        <option th:value="${arma.calibre}" th:text="${#strings.replace(arma.calibre,'_',' ')}"></option>
+                    <label for="armaId" class="form-label"><strong>Calibre</strong></label>
+                    <select class="form-control" id="armaId" name="armaId" required disabled="disabled">
+                        <option th:value="${municao.arma.id}"  th:text="${#strings.replace(municao.arma.calibre,'_',' ')}" selected></option>
                     </select>
                 </div>
+
                 <div class="form-group row">
-                    <label for="descricao" class="form-label"><strong>Descrição</strong></label>
-                    <input type="text" class="form-control" disabled="disabled" id="descricao"
-                           placeholder="informe a descrição"
-                           th:field="${arma.descricao}">
-                </div>
-                <div class="form-group row">
-                    <label for="dataCompra" class="form-label"><strong>Data da Compra</strong></label>
-                    <div class="input-group date" data-date-format="dd/mm/yyyy">
-                        <input type="text" id="dataCompra" class="form-control" placeholder="dd/mm/yyyy" th:field="${arma.dataCompra}" disabled="disabled">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="dataVenda" class="form-label"><strong>Data da Venda</strong></label>
-                    <div class="input-group date" data-date-format="dd/mm/yyyy">
-                        <input type="text" id="dataVenda" class="form-control" placeholder="" th:field="${arma.dataVenda}" disabled="disabled">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="observacao" class="form-label"><strong>Observação</strong></label>
-                    <input type="text" class="form-control" id="observacao"
-                           placeholder=""
-                           th:field="${arma.observacao}"
-                           disabled="disabled">
+                    <label for="quantidade" class="form-label"><strong>Quantidade</strong></label>
+                    <input type="text" class="form-control" id="quantidade"
+                           th:field="${municao.quantidade}"
+                           required disabled="disabled">
                 </div>
 
-                <a th:href="@{'/armas/' + ${arma.id} + '/edit'}" class="btn btn-primary btn-user btn-block">
+                <a th:href="@{'/municoes/' + ${municao.id} + '/edit'}" class="btn btn-primary btn-user btn-block">
                     Editar
                 </a>
 
             </div>
-
         </div>
-
     </div>
 
     <!-- Bootstrap core JavaScript-->
