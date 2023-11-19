@@ -22,6 +22,32 @@
         <!-- Content Row -->
         <div class="row">
 
+            <div class="table-responsive" >
+
+                <table class="table table-bordered">
+
+                    <thead class="table-primary" >
+                    <tr>
+                        <th scope="col">Calibre</th>
+                        <th scope="col">Descrição</th>
+                        <th scope="col">Quantidade</th>
+                        <th scope="col">Selecionar</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="municao : ${municoes}">
+                        <td th:text="${#strings.replace(municao.arma.calibre,'_',' ')}"></td>
+                        <td th:text="${municao.arma.descricao}"></td>
+                        <td th:text="${municao.quantidade}"></td>
+                        <td style="text-align: center;"><a th:href="@{/municoes/{id}(id=${municao.id})}" class="btn btn-primary"><i class="fas fa-check"></i> Selecionar</a></td>
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
 
     </div>

@@ -2,9 +2,11 @@ package dev.uberlan.siscacs.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PositiveOrZero;
+import lombok.Builder;
 
 import java.util.UUID;
 
+@Builder
 @Entity
 @Table(name = "municoes")
 class Municao {

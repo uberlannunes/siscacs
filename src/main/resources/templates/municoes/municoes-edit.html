@@ -6,8 +6,24 @@
       th:with="currentPage='municoes'">
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <title>SisCACs</title>
+
+    <!-- Custom fonts for this template-->
+    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+
+
 </head>
 
 <body>
@@ -16,26 +32,27 @@
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          <h1 class="h3 mb-0 text-gray-800">Cadastrar Munição</h1>
+          <h1 class="h3 mb-0 text-gray-800">Alterar Munições</h1>
         </div>
 
         <!-- Content Row -->
         <div class="row">
 
-            <form th:action="@{/municoes/new}" method="post" class="user" th:object="${municaoRequest}">
+            <form th:action="@{'/municoes/' + ${municaoRequest.id} + '/edit'}" th:method="put" th:object="${municaoRequest}">
+
+                <input type="hidden" th:field="*{id}" id="id">
 
                 <div class="form-group row">
-                    <label for="armaId" class="form-label"><strong>Arma</strong></label>
-                    <select class="form-control" id="armaId" name="armaId" required>
-                        <option value="" selected>Selecione a Arma</option>
-                        <option th:each="arma : ${armas}" th:value="${arma.id}" th:text="${#strings.replace(arma.calibre,'_',' ') + ' - ' + arma.descricao}"></option>
+                    <label for="armaId" class="form-label"><strong>Calibre</strong></label>
+                    <select class="form-control" id="armaId" name="armaId" th:field="*{armaId}" required disabled="disabled">
+                        <option th:value="${arma.id}"  th:text="${#strings.replace(arma.calibre,'_',' ') + ' - ' + arma.descricao}" selected></option>
                     </select>
                     <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('armaId')}" th:errors="*{armaId}"></div>
                 </div>
 
                 <div class="form-group row">
                     <label for="quantidade" class="form-label"><strong>Quantidade</strong></label>
-                    <input type="text" class="form-control" id="quantidade"
+                    <input type="number" class="form-control" id="quantidade"
                            placeholder="informe a quantidade"
                            th:field="*{quantidade}"
                            required>
@@ -48,10 +65,9 @@
                     </div>
                 </div>
             </form>
+
         </div>
-
     </div>
-
 </body>
 
 </html>
