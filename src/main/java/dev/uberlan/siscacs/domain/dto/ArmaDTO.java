@@ -10,6 +10,10 @@ public record ArmaDTO(UUID id, Calibre calibre, String descricao, LocalDate data
         this(id, null, null, null, null, null, null);
     }
 
+    public ArmaDTO(UUID id, Calibre calibre, String descricao) {
+        this(id, calibre, descricao, null, null, null, null);
+    }
+
     public ArmaDTO(UUID id, Calibre calibre) {
         this(id, calibre, null, null, null, null, null);
     }

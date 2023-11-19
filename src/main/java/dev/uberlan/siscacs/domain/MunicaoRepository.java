@@ -1,6 +1,5 @@
 package dev.uberlan.siscacs.domain;
 
-import dev.uberlan.siscacs.domain.dto.ArmaDTO;
 import dev.uberlan.siscacs.domain.dto.MunicaoDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,7 +14,7 @@ interface MunicaoRepository extends JpaRepository<Municao, UUID> {
 
     @Query("""
             SELECT
-             new dev.uberlan.siscacs.domain.dto.MunicaoDTO(a.id, new dev.uberlan.siscacs.domain.dto.ArmaDTO(a.arma.id, a.arma.calibre), a.quantidade)
+             new dev.uberlan.siscacs.domain.dto.MunicaoDTO(a.id, new dev.uberlan.siscacs.domain.dto.ArmaDTO(a.arma.id, a.arma.calibre, a.arma.descricao), a.quantidade)
             FROM Municao a
             WHERE a.id = ?1
             """)
@@ -23,7 +22,15 @@ interface MunicaoRepository extends JpaRepository<Municao, UUID> {
 
     @Query("""
             SELECT
-             new dev.uberlan.siscacs.domain.dto.MunicaoDTO(a.id, new dev.uberlan.siscacs.domain.dto.ArmaDTO(a.arma.id, a.arma.calibre), a.quantidade)
+             new dev.uberlan.siscacs.domain.dto.MunicaoDTO(a.id, new dev.uberlan.siscacs.domain.dto.ArmaDTO(a.arma.id, a.arma.calibre, a.arma.descricao), a.quantidade)
+            FROM Municao a
+            WHERE a.arma = ?1
+            """)
+    Optional<MunicaoDTO> findMunicaoByArma(Arma arma);
+
+    @Query("""
+            SELECT
+             new dev.uberlan.siscacs.domain.dto.MunicaoDTO(a.id, new dev.uberlan.siscacs.domain.dto.ArmaDTO(a.arma.id, a.arma.calibre, a.arma.descricao), a.quantidade)
             FROM Municao a
             WHERE EXISTS (
                            SELECT 1

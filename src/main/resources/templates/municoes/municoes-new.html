@@ -28,7 +28,7 @@
                     <label for="armaId" class="form-label"><strong>Arma</strong></label>
                     <select class="form-control" id="armaId" name="armaId" required>
                         <option value="" selected>Selecione a Arma</option>
-                        <option th:each="arma : ${armas}" th:value="${arma.id}" th:text="${arma.descricao}"></option>
+                        <option th:each="arma : ${armas}" th:value="${arma.id}" th:text="${#strings.replace(arma.calibre,'_',' ') + ' - ' + arma.descricao}"></option>
                     </select>
                     <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('armaId')}" th:errors="*{armaId}"></div>
                 </div>

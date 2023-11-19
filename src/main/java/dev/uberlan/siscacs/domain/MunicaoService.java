@@ -30,16 +30,30 @@ public class MunicaoService {
         return municaoRepository.findMunicoesByUsuarioId(Usuario.builder().id(id).build());
     }
 
+    public Optional<MunicaoDTO> findMunicaoByArmaId(UUID armaId) {
+        return municaoRepository.findMunicaoByArma(Arma.builder().id(armaId).build());
+    }
+
     @Transactional
-    public MunicaoDTO createMunicao(MunicaoCreateCommand cmd) {
-        Municao municao = Municao.builder()
-                .arma(Arma.builder().id(cmd.arma().id()).build())
-                .quantidade(cmd.quantidade()).build();
+    public MunicaoDTO saveMunicao(MunicaoCreateCommand cmd) {
 
-        Municao savedMunicao = municaoRepository.save(municao);
-        ArmaDTO armaDTO = new ArmaDTO(savedMunicao.getArma().getId());
+        MunicaoDTO municaoDTO = findMunicaoByArmaId(cmd.arma().id())
+                .map(m -> {
+                    MunicaoUpdateCommand newCmd = new MunicaoUpdateCommand(m.id(), new ArmaDTO(m.arma().id()), m.quantidade() + cmd.quantidade());
+                    updateMunicao(newCmd);
+                    return new MunicaoDTO(m.id(), newCmd.arma(), newCmd.quantidade());
+                })
+                .orElseGet(() -> {
+                    Municao municao = Municao.builder()
+                            .arma(Arma.builder().id(cmd.arma().id()).build())
+                            .quantidade(cmd.quantidade()).build();
 
-        return new MunicaoDTO(savedMunicao.getId(), armaDTO, savedMunicao.getQuantidade());
+                    Municao savedMunicao = municaoRepository.save(municao);
+                    ArmaDTO armaDTO = new ArmaDTO(savedMunicao.getArma().getId());
+                    return new MunicaoDTO(savedMunicao.getId(), armaDTO, savedMunicao.getQuantidade());
+                });
+
+        return municaoDTO;
     }
 
     @Transactional

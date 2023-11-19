@@ -43,7 +43,7 @@
                 <div class="form-group row">
                     <label for="armaId" class="form-label"><strong>Calibre</strong></label>
                     <select class="form-control" id="armaId" name="armaId" required disabled="disabled">
-                        <option th:value="${municao.arma.id}"  th:text="${#strings.replace(municao.arma.calibre,'_',' ')}" selected></option>
+                        <option th:value="${municao.arma.id}"  th:text="${#strings.replace(municao.arma.calibre,'_',' ') + ' - ' + municao.arma.descricao}" selected></option>
                     </select>
                 </div>
 

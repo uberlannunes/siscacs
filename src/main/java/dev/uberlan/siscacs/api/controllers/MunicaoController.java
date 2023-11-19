@@ -94,7 +94,7 @@ public class MunicaoController {
         ArmaDTO armaDTO = armaService.findArmaById(municaoRequest.armaId()).orElseThrow(() -> ArmaNotFoundException.of(municaoRequest.armaId()));
 
         MunicaoCreateCommand cmd = new MunicaoCreateCommand(new ArmaDTO(municaoRequest.armaId()), municaoRequest.quantidade());
-        municaoService.createMunicao(cmd);
+        municaoService.saveMunicao(cmd);
 
         return "redirect:/municoes";
     }
@@ -107,7 +107,7 @@ public class MunicaoController {
 
         MunicaoDTO municao = municaoService.findMunicaoById(id).orElseThrow(() -> MunicaoNotFoundException.of(id));
 
-        ArmaDTO armaDTO = new ArmaDTO(municao.arma().id(), municao.arma().calibre());
+        ArmaDTO armaDTO = new ArmaDTO(municao.arma().id(), municao.arma().calibre(), municao.arma().descricao());
         MunicaoUpdateRequest municaoRequest = new MunicaoUpdateRequest(municao.id(), armaDTO.id(), municao.quantidade());
 
         model.addAttribute("municaoRequest", municaoRequest);

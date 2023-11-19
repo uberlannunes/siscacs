@@ -45,7 +45,7 @@
                 <div class="form-group row">
                     <label for="armaId" class="form-label"><strong>Calibre</strong></label>
                     <select class="form-control" id="armaId" name="armaId" th:field="*{armaId}" required disabled="disabled">
-                        <option th:value="${arma.id}"  th:text="${#strings.replace(arma.calibre,'_',' ')}" selected></option>
+                        <option th:value="${arma.id}"  th:text="${#strings.replace(arma.calibre,'_',' ') + ' - ' + arma.descricao}" selected></option>
                     </select>
                     <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('armaId')}" th:errors="*{armaId}"></div>
                 </div>
