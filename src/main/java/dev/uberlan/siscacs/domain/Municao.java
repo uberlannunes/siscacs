@@ -15,7 +15,7 @@ class Municao {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "arma_id", nullable = false)
     private Arma arma;
 

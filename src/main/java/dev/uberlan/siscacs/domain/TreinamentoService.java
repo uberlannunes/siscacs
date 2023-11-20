@@ -20,16 +20,12 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class TreinamentoService {
 
-    private final ArmaService armaService;
     private final MunicaoService municaoService;
     private final TreinamentoRepository treinamentoRepository;
-    private final MunicaoRepository municaoRepository;
 
-    public TreinamentoService(ArmaService armaService, MunicaoService municaoService, TreinamentoRepository treinamentoRepository, MunicaoRepository municaoRepository) {
-        this.armaService = armaService;
+    public TreinamentoService(MunicaoService municaoService, TreinamentoRepository treinamentoRepository) {
         this.municaoService = municaoService;
         this.treinamentoRepository = treinamentoRepository;
-        this.municaoRepository = municaoRepository;
     }
 
     public Optional<TreinamentoDTO> findTreinamentoById(UUID id) {
@@ -46,9 +42,9 @@ public class TreinamentoService {
 
     @Transactional
     public TreinamentoDTO createTreinamento(TreinamentoCreateCommand cmd) {
-        MunicaoDTO municaoDTO = municaoService.findMunicaoByArmaId(cmd.arma().id()).orElseThrow(() -> TreinamentoInvalidMunicaoException.of(String.format("Munição de %s não disponível para o treinamento.", cmd.arma().calibre().toString())));
+        MunicaoDTO municaoDTO = municaoService.findMunicaoByArmaId(cmd.arma().id()).orElseThrow(() -> TreinamentoInvalidMunicaoException.of(String.format("Munição de %s não disponível para o treinamento.", cmd.arma().id().toString())));
         if (municaoDTO.quantidade() < cmd.quantidadeTiros())
-            throw TreinamentoInvalidMunicaoException.of(String.format("Munição de %s com quantidade insuficiente para o treinamento.", cmd.arma().calibre().toString()));
+            throw TreinamentoInvalidMunicaoException.of(String.format("Munição de %s com quantidade insuficiente para o treinamento.", cmd.arma().id().toString()));
 
         Treinamento treinamento = Treinamento.builder()
                 .dataTreinamento(cmd.dataTreinamento())
@@ -69,19 +65,12 @@ public class TreinamentoService {
 
     @Transactional
     public void updateTreinamento(TreinamentoUpdateCommand cmd) {
-//        MunicaoDTO municaoDTO = municaoService.findMunicaoByArmaId(cmd.arma().id()).orElseThrow(() -> TreinamentoInvalidMunicaoException.of(String.format("Munição de %s não disponível para o treinamento.", cmd.arma().calibre().toString())));
-//        Municao municao = municaoRepository.findByArma(Arma.builder().id(cmd.arma().id()).build());
-        List<Municao> municoes = municaoRepository.findAll();
-        Municao municao = municoes.stream().filter(m -> m.getArma().getId().equals(cmd.arma().id())).findFirst().orElseThrow(() -> TreinamentoInvalidMunicaoException.of(String.format("Munição de %s não disponível para o treinamento.", cmd.arma().id().toString())));
-        if (municao.getQuantidade() < cmd.quantidadeTiros())
-            throw TreinamentoInvalidMunicaoException.of(String.format("Munição de %s com quantidade insuficiente para o treinamento.", cmd.arma().calibre().toString()));
-//
-////        ArmaDTO armaDTO = armaService.findArmaById(municaoDTO.arma().id()).orElseThrow(() -> ArmaNotFoundException.of(municaoDTO.arma().id()));
-//
-//        TreinamentoDTO treinamentoDTO = treinamentoRepository.findTreinamentoById(cmd.id()).orElseThrow(() -> TreinamentoNotFoundException.of(cmd.id()));
-
         Treinamento treinamento = treinamentoRepository.findById(cmd.id()).orElseThrow(() -> TreinamentoNotFoundException.of(cmd.id()));
-        boolean isQuantidadeTirosDiferente = treinamento.getQuantidadeTiros() != cmd.quantidadeTiros();
+        int diferencaTiros = treinamento.getQuantidadeTiros() - cmd.quantidadeTiros();
+
+        MunicaoDTO municaoDTO = municaoService.findMunicaoByArmaId(cmd.arma().id()).orElseThrow(() -> TreinamentoInvalidMunicaoException.of(String.format("Munição de %s não disponível para o treinamento.", cmd.arma().id().toString())));
+        if (municaoDTO.quantidade() < (diferencaTiros * -1))
+            throw TreinamentoInvalidMunicaoException.of(String.format("Munição de %s com quantidade insuficiente para o treinamento.", cmd.arma().id().toString()));
 
         treinamento.setDataTreinamento(cmd.dataTreinamento());
         treinamento.setQuantidadeTiros(cmd.quantidadeTiros());
@@ -90,21 +79,11 @@ public class TreinamentoService {
         treinamento.setUpdatedAt(LocalDateTime.now());
 
         treinamentoRepository.save(treinamento);
-//
-//        treinamentoRepository.updateTreinamento(
-//                cmd.id(),
-//                cmd.dataTreinamento(),
-//                cmd.quantidadeTiros(),
-//                cmd.pontuacao(),
-//                cmd.observacao(),
-//                LocalDateTime.now()
-//                );
 
-//        if (treinamentoDTO.quantidadeTiros() != cmd.quantidadeTiros()) {
-//            int diferencaTiros = treinamentoDTO.quantidadeTiros() - cmd.quantidadeTiros();
-//            MunicaoUpdateCommand municaoUpdateCommand = new MunicaoUpdateCommand(municaoDTO.id(), municaoDTO.arma(), municaoDTO.quantidade() + diferencaTiros);
-//            municaoService.updateMunicao(municaoUpdateCommand);
-//        }
+        if (diferencaTiros != 0) {
+            MunicaoUpdateCommand municaoUpdateCommand = new MunicaoUpdateCommand(municaoDTO.id(), municaoDTO.arma(), municaoDTO.quantidade() + diferencaTiros);
+            municaoService.updateMunicao(municaoUpdateCommand);
+        }
     }
 
 }

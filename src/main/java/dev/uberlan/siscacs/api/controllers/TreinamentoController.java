@@ -40,8 +40,6 @@ public class TreinamentoController {
 
     @GetMapping
     public ModelAndView homeTreinamentosShow(Principal principal) {
-        System.out.println("homeTreinamentosShow > principal = " + principal);
-
         Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
 
         List<TreinamentoDTO> treinamentos = treinamentoService.findTreinamentosByUsuarioId(usuario.getId());
@@ -54,8 +52,6 @@ public class TreinamentoController {
 
     @GetMapping("/{id}")
     public ModelAndView consultarTreinamento(Principal principal, @PathVariable("id") UUID id) {
-        System.out.println("consultarTreinamento > principal = " + principal);
-
         TreinamentoDTO treinamento = treinamentoService.findTreinamentoById(id).orElseThrow(() -> TreinamentoNotFoundException.of(id));
 
         ModelAndView modelAndView = new ModelAndView();
@@ -67,8 +63,6 @@ public class TreinamentoController {
 
     @GetMapping("/new")
     public ModelAndView cadastrarTreinamentoShow(Principal principal, @ModelAttribute("treinamentoRequest") TreinamentoCreateRequest treinamentoRequest) {
-        System.out.println("cadastrarTreinamentoShow > principal = " + principal);
-
         Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
 
         List<ArmaDTO> armas = armaService.findArmasByUsuario(usuario.getId());
@@ -82,10 +76,7 @@ public class TreinamentoController {
 
     @PostMapping("/new")
     public String cadastrarTreinamento(Principal principal, @ModelAttribute("treinamentoRequest") TreinamentoCreateRequest treinamentoRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        System.out.println("cadastrarMunicao > principal = " + principal);
-
         if (bindingResult.hasErrors()) {
-            System.out.println("bindingResult.toString() = " + bindingResult.toString());
             return "treinamentos/treinamentos-new";
         }
 
