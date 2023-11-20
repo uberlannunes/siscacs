@@ -22,6 +22,30 @@
   <!-- Content Row -->
   <div class="row">
 
+
+    <div class="form-horizontal">
+
+      <div class="form-group row">
+        <label for="login" class="form-label"><strong>Login</strong></label>
+        <input type="text" class="form-control" disabled="disabled" id="login" th:field="${usuario.login}">
+      </div>
+
+      <div class="form-group row">
+        <label for="nome" class="form-label"><strong>Nome</strong></label>
+        <input type="text" class="form-control" disabled="disabled" id="nome" th:field="${usuario.nome}">
+      </div>
+
+      <div class="form-group row">
+        <label for="cacId" class="form-label"><strong>Nome</strong></label>
+        <input type="text" class="form-control" disabled="disabled" id="cacId" th:field="${usuario.cacId}">
+      </div>
+
+      <a th:href="@{'/usuarios/edit'}" class="btn btn-primary btn-user btn-block">
+        Editar
+      </a>
+
+    </div>
+
   </div>
 
 </div>

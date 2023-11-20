@@ -1,15 +1,24 @@
 package dev.uberlan.siscacs.api.controllers;
 
+import dev.uberlan.siscacs.api.request.UsuarioChangePasswordRequest;
 import dev.uberlan.siscacs.api.request.UsuarioCreateRequest;
+import dev.uberlan.siscacs.api.request.UsuarioUpdateRequest;
+import dev.uberlan.siscacs.domain.Usuario;
 import dev.uberlan.siscacs.domain.UsuarioService;
 import dev.uberlan.siscacs.domain.command.UsuarioCreateCommand;
+import dev.uberlan.siscacs.domain.command.UsuarioUpdateDadosPessoaisCommand;
+import dev.uberlan.siscacs.domain.command.UsuarioUpdatePasswordCommand;
 import dev.uberlan.siscacs.domain.dto.UsuarioDTO;
+import dev.uberlan.siscacs.exception.UsuarioNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -54,5 +63,68 @@ public class UsuarioController {
         modelAndView.addObject("usuario", usuario);
         modelAndView.setViewName("usuarios/usuarios-view");
         return modelAndView;
+    }
+
+    @GetMapping("/home")
+    public String homeShow() {
+        return "usuarios/usuarios-home";
+    }
+
+    @GetMapping("/view")
+    public String dadosPessoaisShow(Principal principal, Model model) {
+        System.out.println("dadosPessoaisShow > principal = " + principal);
+        Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
+        UsuarioDTO usuarioDTO = new UsuarioDTO(usuario.getId(), usuario.getLogin(), usuario.getNome(), usuario.getCacId());
+        model.addAttribute("usuario", usuarioDTO);
+        return "usuarios/usuarios-view";
+    }
+
+    @GetMapping("/edit")
+    public String editDadosPessoaisShow(Principal principal, Model model) {
+        System.out.println("editDadosPessoaisShow > principal = " + principal);
+        Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
+        UsuarioUpdateRequest usuarioUpdateRequest = new UsuarioUpdateRequest(usuario.getLogin(), usuario.getNome(), usuario.getCacId());
+        model.addAttribute("usuarioRequest", usuarioUpdateRequest);
+        return "usuarios/usuarios-edit";
+    }
+
+    @PutMapping("/edit")
+    public String editDadosPessoais(Principal principal, @Valid @ModelAttribute("usuarioRequest") UsuarioUpdateRequest usuarioRequest) {
+        System.out.println("editDadosPessoais > principal = " + principal);
+        System.out.println("editDadosPessoais > usuarioRequest = " + usuarioRequest);
+
+        Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
+
+        UsuarioUpdateDadosPessoaisCommand cmd = new UsuarioUpdateDadosPessoaisCommand(usuario.getId(), usuarioRequest.nome(), usuarioRequest.cacId());
+        usuarioService.updateDadosPessoais(cmd);
+
+        return "usuarios/usuarios-home";
+    }
+
+    @GetMapping("/password")
+    public String passwordShow(@ModelAttribute("usuarioPasswordRequest") UsuarioChangePasswordRequest usuarioPasswordRequest) {
+        return "usuarios/usuarios-password";
+    }
+
+    @PutMapping("/password")
+    public String passwordShow(Principal principal, @Valid @ModelAttribute("usuarioPasswordRequest") UsuarioChangePasswordRequest usuarioPasswordRequest, BindingResult bindingResult) {
+        System.out.println("passwordShow > principal = " + principal);
+        System.out.println("passwordShow > usuarioPasswordRequest = " + usuarioPasswordRequest);
+
+        if (!usuarioPasswordRequest.passwordNew().equals(usuarioPasswordRequest.passwordNewConfirm())) {
+            bindingResult.rejectValue("passwordNewConfirm", "usuarioPasswordRequest.passwordNewConfirm", "O novo password e confirmação não são iguais!");
+        }
+
+        if (bindingResult.hasErrors()) {
+            System.out.println("bindingResult.toString() = " + bindingResult.toString());
+            return "usuarios/usuarios-password";
+        }
+
+        Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
+
+        UsuarioUpdatePasswordCommand cmd = new UsuarioUpdatePasswordCommand(usuario.getId(), usuarioPasswordRequest.passwordNew());
+        usuarioService.updatePassword(cmd);
+
+        return "redirect:/usuarios/home";
     }
 }
