@@ -23,7 +23,7 @@ class Treinamento {
     @Column(name = "data_treinamento", nullable = false)
     private LocalDate dataTreinamento;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "arma_id", nullable = false)
     private Arma arma;
 

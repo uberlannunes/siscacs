@@ -12,6 +12,8 @@ import java.util.UUID;
 
 interface MunicaoRepository extends JpaRepository<Municao, UUID> {
 
+    Municao findByArma(Arma arma);
+
     @Query("""
             SELECT
              new dev.uberlan.siscacs.domain.dto.MunicaoDTO(a.id, new dev.uberlan.siscacs.domain.dto.ArmaDTO(a.arma.id, a.arma.calibre, a.arma.descricao), a.quantidade)
