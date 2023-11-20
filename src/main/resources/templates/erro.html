@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"
+      th:with="currentPage='home'">
+
+<head>
+    <meta charset="utf-8" />
+    <title>SisCACs</title>
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+
+        <!-- Page Heading -->
+<!--        <div class="d-sm-flex align-items-center justify-content-between mb-4">-->
+<!--          <h1 class="h3 mb-0 text-gray-800">Erro ao processar solicitação</h1>-->
+<!--        </div>-->
+
+        <!-- Content Row -->
+        <div class="row">
+
+            <h1 class="h2 mb-4" th:utext="${tituloPagina}" ></h1>
+
+            <div class="alert alert-warning" role="alert">
+                <p th:utext="${mensagemErro}"></p>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
