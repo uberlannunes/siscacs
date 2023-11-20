@@ -2,6 +2,8 @@ package dev.uberlan.siscacs.domain;
 
 import dev.uberlan.siscacs.domain.command.UsuarioCreateCommand;
 import dev.uberlan.siscacs.domain.command.UsuarioUpdateCommand;
+import dev.uberlan.siscacs.domain.command.UsuarioUpdateDadosPessoaisCommand;
+import dev.uberlan.siscacs.domain.command.UsuarioUpdatePasswordCommand;
 import dev.uberlan.siscacs.domain.dto.UsuarioDTO;
 import dev.uberlan.siscacs.exception.UsuarioNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,8 +63,31 @@ public class UsuarioService {
                 .orElseThrow(() -> UsuarioNotFoundException.of(cmd.id().toString()));
 
         usuario.setNome(cmd.nome());
-        usuario.setPassword(cmd.password());
+        usuario.setPassword(passwordEncoder.encode(cmd.password()));
         usuario.setCacId(cmd.cacId());
+        usuario.setUpdatedAt(LocalDateTime.now());
+        usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public void updateDadosPessoais(UsuarioUpdateDadosPessoaisCommand cmd) {
+
+        Usuario usuario = usuarioRepository.findById(cmd.id())
+                .orElseThrow(() -> UsuarioNotFoundException.of(cmd.id().toString()));
+
+        usuario.setNome(cmd.nome());
+        usuario.setCacId(cmd.cacId());
+        usuario.setUpdatedAt(LocalDateTime.now());
+        usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public void updatePassword(UsuarioUpdatePasswordCommand cmd) {
+
+        Usuario usuario = usuarioRepository.findById(cmd.id())
+                .orElseThrow(() -> UsuarioNotFoundException.of(cmd.id().toString()));
+
+        usuario.setPassword(passwordEncoder.encode(cmd.password()));
         usuario.setUpdatedAt(LocalDateTime.now());
         usuarioRepository.save(usuario);
     }

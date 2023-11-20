@@ -16,37 +16,28 @@
 
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Usuarios home</h1>
+    <h1 class="h3 mb-0 text-gray-800">Home</h1>
   </div>
 
   <!-- Content Row -->
   <div class="row">
 
-    <div class="table-responsive" >
+    <div class="form-horizontal">
+        <a href="/usuarios/view" class="btn btn-primary btn-icon-split btn-lg">
+            <span class="icon text-white-50">
+                <i class="fas fa-flag"></i>
+            </span>
+            <span class="text">Dados pessoais</span>
+        </a>
 
-      <table class="table table-bordered">
+        <div class="my-2"></div>
 
-        <thead class="table-primary" >
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">LOGIN</th>
-          <th scope="col">NOME</th>
-          <th scope="col">CAC ID</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr th:each="usuario : ${usuarios}">
-          <td scope="row" th:text="${usuario.id}"></td>
-          <td scope="row" th:text="${usuario.login}"></td>
-          <td scope="row" th:text="${usuario.nome}"></td>
-          <td scope="row" th:text="${usuario.cacId}"></td>
-          <td style="text-align: center;"><a th:href="@{/usuarios/{id}(id=${usuario.id})}" class="btn btn-primary"><i class="fas fa-check"></i> Selecionar</a></td>
-        </tr>
-        </tbody>
-
-      </table>
-
+        <a href="/usuarios/password" class="btn btn-primary btn-icon-split btn-lg">
+            <span class="icon text-white-50">
+                <i class="fas fa-flag"></i>
+            </span>
+            <span class="text">Alterar senha</span>
+        </a>
     </div>
 
   </div>
