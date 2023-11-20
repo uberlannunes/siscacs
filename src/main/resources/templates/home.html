@@ -16,11 +16,37 @@
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          <h1 class="h3 mb-0 text-gray-800">Home</h1>
+          <h1 class="h3 mb-0 text-gray-800">Desempenho de treinos</h1>
         </div>
 
         <!-- Content Row -->
         <div class="row">
+
+            <span th:if="${#lists.isEmpty(treinamentos)}">Sem treinamentos para exibir.</span>
+
+            <div th:unless="${#lists.isEmpty(treinamentos)}" class="table-responsive" >
+
+                <table class="table table-bordered">
+
+                    <thead class="table-primary" >
+                        <tr>
+                            <th scope="col">Data do Treinamento</th>
+                            <th scope="col">Quantidade de Tiros</th>
+                            <th scope="col">Pontuação</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr th:each="treinamento : ${treinamentos}">
+                            <td th:text="${#temporals.format(treinamento.dataTreinamento, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${treinamento.quantidadeTiros}"></td>
+                            <td th:text="${treinamento.pontuacao}"></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </div>
 
