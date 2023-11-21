@@ -13,7 +13,7 @@ public class GlobalControllerExceptionHandler {
         mav.addObject("tituloPagina", "Não foi possível processar a solicitação.");
         mav.addObject("mensagemErro", e.getMessage());
 
-        mav.setViewName("/erro");
+        mav.setViewName("erro");
         return mav;
     }
 }

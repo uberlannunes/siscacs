@@ -108,7 +108,6 @@ public class UsuarioController {
     @PutMapping("/password")
     public String passwordShow(Principal principal, @Valid @ModelAttribute("usuarioPasswordRequest") UsuarioChangePasswordRequest usuarioPasswordRequest, BindingResult bindingResult) {
         Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
-//        String encodedPassword = passwordEncoder.encode(usuarioPasswordRequest.password());
 
         if (!passwordEncoder.matches(usuarioPasswordRequest.password(), usuario.getPassword())) {
             bindingResult.rejectValue("password", "usuarioPasswordRequest.password", "O password atual é inválido!");
