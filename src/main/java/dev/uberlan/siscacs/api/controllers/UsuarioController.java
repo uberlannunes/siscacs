@@ -11,6 +11,7 @@ import dev.uberlan.siscacs.domain.command.UsuarioUpdatePasswordCommand;
 import dev.uberlan.siscacs.domain.dto.UsuarioDTO;
 import dev.uberlan.siscacs.exception.UsuarioNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,9 +28,11 @@ import java.util.UUID;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService, PasswordEncoder passwordEncoder) {
         this.usuarioService = usuarioService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -104,16 +107,20 @@ public class UsuarioController {
 
     @PutMapping("/password")
     public String passwordShow(Principal principal, @Valid @ModelAttribute("usuarioPasswordRequest") UsuarioChangePasswordRequest usuarioPasswordRequest, BindingResult bindingResult) {
+        Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
+//        String encodedPassword = passwordEncoder.encode(usuarioPasswordRequest.password());
+
+        if (!passwordEncoder.matches(usuarioPasswordRequest.password(), usuario.getPassword())) {
+            bindingResult.rejectValue("password", "usuarioPasswordRequest.password", "O password atual é inválido!");
+        }
+
         if (!usuarioPasswordRequest.passwordNew().equals(usuarioPasswordRequest.passwordNewConfirm())) {
             bindingResult.rejectValue("passwordNewConfirm", "usuarioPasswordRequest.passwordNewConfirm", "O novo password e confirmação não são iguais!");
         }
-
         if (bindingResult.hasErrors()) {
             System.out.println("bindingResult.toString() = " + bindingResult.toString());
             return "usuarios/usuarios-password";
         }
-
-        Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
 
         UsuarioUpdatePasswordCommand cmd = new UsuarioUpdatePasswordCommand(usuario.getId(), usuarioPasswordRequest.passwordNew());
         usuarioService.updatePassword(cmd);

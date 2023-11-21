@@ -29,8 +29,6 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> findUsuarioByLogin(String login) {
-//        Optional<Usuario> byLogin = Optional.ofNullable(usuarioRepository.findByLogin(login));
-//        return byLogin.map(u -> Optional.of(new UsuarioDTO(u.getId(), u.getLogin(), u.getNome(), u.getCacId()))).orElse(Optional.empty());
         return Optional.ofNullable(usuarioRepository.findByLogin(login));
     }
 
