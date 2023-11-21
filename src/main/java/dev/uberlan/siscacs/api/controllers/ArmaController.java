@@ -8,11 +8,9 @@ import dev.uberlan.siscacs.domain.UsuarioService;
 import dev.uberlan.siscacs.domain.command.ArmaCreateCommand;
 import dev.uberlan.siscacs.domain.command.ArmaUpdateCommand;
 import dev.uberlan.siscacs.domain.dto.ArmaDTO;
-import dev.uberlan.siscacs.exception.ArmaInvalidDataException;
 import dev.uberlan.siscacs.exception.ArmaNotFoundException;
 import dev.uberlan.siscacs.exception.UsuarioNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,8 +36,6 @@ public class ArmaController {
 
     @GetMapping
     public ModelAndView consultarArmas(Principal principal) {
-        System.out.println("principal = " + principal);
-
         Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
 
         List<ArmaDTO> armas = armaService.findArmasByUsuario(usuario.getId());
@@ -52,8 +48,6 @@ public class ArmaController {
 
     @GetMapping("/{id}")
     public ModelAndView consultarArma(Principal principal, @PathVariable("id") UUID id) {
-        System.out.println("principal = " + principal);
-
         ArmaDTO arma = armaService.findArmaById(id).orElseThrow(() -> ArmaNotFoundException.of(id));
 
         ModelAndView modelAndView = new ModelAndView();
@@ -65,8 +59,6 @@ public class ArmaController {
 
     @GetMapping("/new")
     public ModelAndView cadastrarArmaShow(Principal principal, @ModelAttribute("armaRequest") ArmaCreateRequest armaRequest) {
-        System.out.println("principal = " + principal);
-
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("armas/armas-new");
         return modelAndView;
@@ -74,12 +66,7 @@ public class ArmaController {
 
     @PostMapping("/new")
     public String cadastrarArma(Principal principal, @Valid @ModelAttribute("armaRequest") ArmaCreateRequest armaRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        System.out.println("principal = " + principal);
-        System.out.println("principal.getName = " + principal.getName());
-        System.out.println("armaRequest = " + armaRequest);
-
         if (bindingResult.hasErrors()) {
-            System.out.println("bindingResult.toString() = " + bindingResult.toString());
             return "armas/armas-new";
         }
 
@@ -93,8 +80,6 @@ public class ArmaController {
 
     @GetMapping("/{id}/edit")
     public String editarArmaShow(Principal principal, @PathVariable("id") UUID id, Model model) {
-        System.out.println("principal = " + principal);
-
         ArmaDTO arma = armaService.findArmaById(id).orElseThrow(() -> ArmaNotFoundException.of(id));
 
         ArmaUpdateRequest armaRequest = new ArmaUpdateRequest(arma.id(), arma.calibre(), arma.descricao(), arma.dataCompra(), arma.dataVenda(), arma.observacao());
@@ -105,13 +90,6 @@ public class ArmaController {
 
     @PutMapping("/{id}/edit")
     public String editarArma(Principal principal, @PathVariable("id") UUID id, @Valid @ModelAttribute("armaRequest") ArmaUpdateRequest armaRequest) {
-        System.out.println("principal = " + principal);
-        System.out.println("armaRequest = " + armaRequest);
-
-//        if (!id.equals(armaRequest.id()))
-//            throw new ArmaInvalidDataException(id);
-
-//        ArmaDTO arma = armaService.findArmaById(id).orElseThrow(() -> ArmaNotFoundException.of(id));
         ArmaUpdateCommand cmd = new ArmaUpdateCommand(armaRequest.id(), armaRequest.calibre(), armaRequest.descricao(), armaRequest.dataCompra(), armaRequest.dataVenda(), armaRequest.observacao());
         armaService.updateArma(cmd);
 

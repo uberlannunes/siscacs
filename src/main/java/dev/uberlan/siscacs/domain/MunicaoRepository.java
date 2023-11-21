@@ -40,9 +40,9 @@ interface MunicaoRepository extends JpaRepository<Municao, UUID> {
                            WHERE b.id = a.arma.id
                              AND b.usuario = ?1
                           )
+            ORDER BY a.arma
             """)
     List<MunicaoDTO> findMunicoesByUsuarioId(Usuario usuario);
-//            ORDER BY a.arma
 
     @Modifying
     @Query("update Municao m set m.quantidade = :quantidade where m.id = :id")

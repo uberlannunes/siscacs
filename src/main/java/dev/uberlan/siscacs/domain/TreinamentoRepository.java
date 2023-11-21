@@ -45,16 +45,6 @@ interface TreinamentoRepository extends JpaRepository<Treinamento, UUID> {
             """)
     List<TreinamentoDTO> findTreinamentosByUsuario(Usuario usuario);
 
-
-//    @Query("""
-//            UPDATE Treinamento t
-//              SET t.dataTreinamento = :dataTreinamento,
-//                  t.quantidadeTiros = :quantidadeTiros,
-//                  t.pontuacao = :pontuacao,
-//                  t.observacao = :observacao,
-//                  t.updatedAt = :updatedAt
-//             WHERE t.id = :id
-//            """)
     @Modifying
     @Query("UPDATE Treinamento t SET t.dataTreinamento = :dataTreinamento, t.quantidadeTiros = :quantidadeTiros, t.pontuacao = :pontuacao, t.observacao = :observacao, t.updatedAt = :updatedAt WHERE t.id = :id")
     void updateTreinamento(@Param(value = "id") UUID id,

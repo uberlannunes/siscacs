@@ -26,10 +26,6 @@ public class AuthController {
 
     @GetMapping
     public String login() {
-//        UsuarioLoginRequest usuario = new UsuarioLoginRequest("", "");
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        System.out.println("auth = " + auth);
-
         return "login";
     }
 

@@ -16,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
@@ -72,27 +71,24 @@ public class UsuarioController {
 
     @GetMapping("/view")
     public String dadosPessoaisShow(Principal principal, Model model) {
-        System.out.println("dadosPessoaisShow > principal = " + principal);
         Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
         UsuarioDTO usuarioDTO = new UsuarioDTO(usuario.getId(), usuario.getLogin(), usuario.getNome(), usuario.getCacId());
         model.addAttribute("usuario", usuarioDTO);
+
         return "usuarios/usuarios-view";
     }
 
     @GetMapping("/edit")
     public String editDadosPessoaisShow(Principal principal, Model model) {
-        System.out.println("editDadosPessoaisShow > principal = " + principal);
         Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
         UsuarioUpdateRequest usuarioUpdateRequest = new UsuarioUpdateRequest(usuario.getLogin(), usuario.getNome(), usuario.getCacId());
         model.addAttribute("usuarioRequest", usuarioUpdateRequest);
+
         return "usuarios/usuarios-edit";
     }
 
     @PutMapping("/edit")
     public String editDadosPessoais(Principal principal, @Valid @ModelAttribute("usuarioRequest") UsuarioUpdateRequest usuarioRequest) {
-        System.out.println("editDadosPessoais > principal = " + principal);
-        System.out.println("editDadosPessoais > usuarioRequest = " + usuarioRequest);
-
         Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
 
         UsuarioUpdateDadosPessoaisCommand cmd = new UsuarioUpdateDadosPessoaisCommand(usuario.getId(), usuarioRequest.nome(), usuarioRequest.cacId());
@@ -108,9 +104,6 @@ public class UsuarioController {
 
     @PutMapping("/password")
     public String passwordShow(Principal principal, @Valid @ModelAttribute("usuarioPasswordRequest") UsuarioChangePasswordRequest usuarioPasswordRequest, BindingResult bindingResult) {
-        System.out.println("passwordShow > principal = " + principal);
-        System.out.println("passwordShow > usuarioPasswordRequest = " + usuarioPasswordRequest);
-
         if (!usuarioPasswordRequest.passwordNew().equals(usuarioPasswordRequest.passwordNewConfirm())) {
             bindingResult.rejectValue("passwordNewConfirm", "usuarioPasswordRequest.passwordNewConfirm", "O novo password e confirmação não são iguais!");
         }

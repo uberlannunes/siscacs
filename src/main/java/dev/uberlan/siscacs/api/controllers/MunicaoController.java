@@ -41,8 +41,6 @@ public class MunicaoController {
 
     @GetMapping
     public ModelAndView consultarMunicoes(Principal principal) {
-        System.out.println("consultarMunicoes > principal = " + principal);
-
         Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
 
         List<MunicaoDTO> municoes = municaoService.findMunicoesByUsuarioId(usuario.getId());
@@ -55,8 +53,6 @@ public class MunicaoController {
 
     @GetMapping("/{id}")
     public ModelAndView consultarMunicao(Principal principal, @PathVariable("id") UUID id) {
-        System.out.println("consultarMunicao > principal = " + principal);
-
         MunicaoDTO municao = municaoService.findMunicaoById(id).orElseThrow(() -> MunicaoNotFoundException.of(id));
 
         ModelAndView modelAndView = new ModelAndView();
@@ -68,8 +64,6 @@ public class MunicaoController {
 
     @GetMapping("/new")
     public ModelAndView cadastrarMunicaoShow(Principal principal, @ModelAttribute("municaoRequest") MunicaoCreateRequest municaoRequest) {
-        System.out.println("cadastrarMunicaoShow > principal = " + principal);
-
         Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
 
         List<ArmaDTO> armas = armaService.findArmasByUsuario(usuario.getId());
@@ -82,10 +76,7 @@ public class MunicaoController {
 
     @PostMapping("/new")
     public String cadastrarMunicao(Principal principal, @ModelAttribute("municaoRequest") MunicaoCreateRequest municaoRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        System.out.println("cadastrarMunicao > principal = " + principal);
-
         if (bindingResult.hasErrors()) {
-            System.out.println("bindingResult.toString() = " + bindingResult.toString());
             return "municoes/municoes-new";
         }
 
@@ -101,8 +92,6 @@ public class MunicaoController {
 
     @GetMapping("/{id}/edit")
     public String editarMunicaoShow(Principal principal, @PathVariable("id") UUID id, Model model) {
-        System.out.println("editarMunicaoShow > principal = " + principal);
-
         Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
 
         MunicaoDTO municao = municaoService.findMunicaoById(id).orElseThrow(() -> MunicaoNotFoundException.of(id));
@@ -118,13 +107,6 @@ public class MunicaoController {
 
     @PutMapping("/{id}/edit")
     public String editarMunicao(Principal principal, @PathVariable("id") UUID id, @Valid @ModelAttribute("municaoRequest") MunicaoUpdateRequest municaoRequest) {
-        System.out.println("editarMunicao > principal = " + principal);
-        System.out.println("editarMunicao > municaoRequest = " + municaoRequest);
-
-//        if (!id.equals(armaRequest.id()))
-//            throw new ArmaInvalidDataException(id);
-
-//        ArmaDTO arma = armaService.findArmaById(id).orElseThrow(() -> ArmaNotFoundException.of(id));
         MunicaoUpdateCommand cmd = new MunicaoUpdateCommand(municaoRequest.id(), new ArmaDTO(municaoRequest.armaId()), municaoRequest.quantidade());
         municaoService.updateMunicao(cmd);
 

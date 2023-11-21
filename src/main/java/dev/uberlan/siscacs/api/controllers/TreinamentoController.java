@@ -2,7 +2,10 @@ package dev.uberlan.siscacs.api.controllers;
 
 import dev.uberlan.siscacs.api.request.TreinamentoCreateRequest;
 import dev.uberlan.siscacs.api.request.TreinamentoUpdateRequest;
-import dev.uberlan.siscacs.domain.*;
+import dev.uberlan.siscacs.domain.ArmaService;
+import dev.uberlan.siscacs.domain.TreinamentoService;
+import dev.uberlan.siscacs.domain.Usuario;
+import dev.uberlan.siscacs.domain.UsuarioService;
 import dev.uberlan.siscacs.domain.command.TreinamentoCreateCommand;
 import dev.uberlan.siscacs.domain.command.TreinamentoUpdateCommand;
 import dev.uberlan.siscacs.domain.dto.ArmaDTO;
@@ -28,13 +31,11 @@ public class TreinamentoController {
 
     private final UsuarioService usuarioService;
     private final ArmaService armaService;
-    private final MunicaoService municaoService;
     private final TreinamentoService treinamentoService;
 
-    public TreinamentoController(UsuarioService usuarioService, ArmaService armaService, MunicaoService municaoService, TreinamentoService treinamentoService) {
+    public TreinamentoController(UsuarioService usuarioService, ArmaService armaService, TreinamentoService treinamentoService) {
         this.usuarioService = usuarioService;
         this.armaService = armaService;
-        this.municaoService = municaoService;
         this.treinamentoService = treinamentoService;
     }
 
@@ -92,8 +93,6 @@ public class TreinamentoController {
 
     @GetMapping("/{id}/edit")
     public String editarTreinamentoShow(Principal principal, @PathVariable("id") UUID id, Model model) {
-        System.out.println("editarTreinamentoShow > principal = " + principal);
-
         Usuario usuario = usuarioService.findUsuarioByLogin(principal.getName()).orElseThrow(() -> UsuarioNotFoundException.of(principal.getName()));
 
         TreinamentoDTO treinamentoDTO = treinamentoService.findTreinamentoById(id).orElseThrow(() -> TreinamentoNotFoundException.of(id));
@@ -109,9 +108,6 @@ public class TreinamentoController {
 
     @PutMapping("/{id}/edit")
     public String editarTreinamento(Principal principal, @PathVariable("id") UUID id, @Valid @ModelAttribute("treinamentoRequest") TreinamentoUpdateRequest treinamentoRequest) {
-        System.out.println("editarTreinamento > principal = " + principal);
-        System.out.println("editarTreinamento > treinamentoRequest = " + treinamentoRequest);
-
         TreinamentoUpdateCommand cmd = new TreinamentoUpdateCommand(id, treinamentoRequest.dataTreinamento(), new ArmaDTO(treinamentoRequest.armaId()), treinamentoRequest.quantidadeTiros(), treinamentoRequest.pontuacao(), treinamentoRequest.observacao());
         treinamentoService.updateTreinamento(cmd);
 
